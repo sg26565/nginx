@@ -2,30 +2,44 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 
 metadata:
-  name: nginx
+  name: nginx-external
+
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+
+spec:
+  tls:
+    - hosts:
+        - nginx.treichels.net
+      secretName: nginx-ext-cert
+
+  rules:
+    - host: nginx.treichels.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx
+                port:
+                  name: https
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+  name: nginx-internal
 
   annotations:
     cert-manager.io/cluster-issuer: my-ca
-    cert-manager.io/common-name: nginx.lan
-    cert-manager.io/email-sans: oliver.treichel@gmx.de
-    cert-manager.io/subject-organizations: Treichels
-    cert-manager.io/subject-organizationalunits: K3S Cluster
-    cert-manager.io/subject-countries: Germany
-    cert-manager.io/subject-provinces: Brandenburg
-    cert-manager.io/subject-localities: Oberkrämer
-    cert-manager.io/subject-postalcodes: "16727"
-    cert-manager.io/usages: server auth
 
 spec:
-  ingressClassName: traefik
-
   tls:
     - hosts:
         - nginx.lan
-      secretName: nginx-cert
-    - hosts:
-        - nginx.treichels.net
-      secretName: nginx-treichels-net
+        - nginx-lb.lan
+      secretName: nginx-int-cert
 
   rules:
     - host: nginx.lan
@@ -37,14 +51,4 @@ spec:
               service:
                 name: nginx
                 port:
-                  number: 80
-    - host: nginx.treichels.net
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: nginx
-                port:
-                  number: 80
+                  name: https
