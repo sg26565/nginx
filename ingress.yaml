@@ -4,17 +4,47 @@ kind: Ingress
 metadata:
   name: nginx
 
+  annotations:
+    cert-manager.io/cluster-issuer: my-ca
+    cert-manager.io/common-name: nginx.lan
+    cert-manager.io/email-sans: oliver.treichel@gmx.de
+    cert-manager.io/subject-organizations: Treichels
+    cert-manager.io/subject-organizationalunits: K3S Cluster
+    cert-manager.io/subject-countries: Germany
+    cert-manager.io/subject-provinces: Brandenburg
+    cert-manager.io/subject-localities: Oberkrämer
+    cert-manager.io/subject-postalcodes: "16727"
+    cert-manager.io/usages: server auth
+
 spec:
   ingressClassName: traefik
 
+  tls:
+    - hosts:
+        - nginx.lan
+      secretName: nginx-cert
+    - hosts:
+        - nginx.treichels.net
+      secretName: nginx-treichels-net
+
   rules:
-  - host: nginx-ingress.lan
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: nginx
-            port:
-              number: 80
+    - host: nginx.lan
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx
+                port:
+                  number: 80
+    - host: nginx.treichels.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx
+                port:
+                  number: 80
