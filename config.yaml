@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: nginx-config
+
+data:
+  default.conf: |
+    server {
+        listen       80;
+        listen  [::]:80;
+        server_name  nginx-lb;
+
+        location / {
+            root   /usr/share/nginx/html;
+            index  index.html;
+        }
+    }
+
+  secure.conf: |
+    server {
+        listen       443 ssl;
+        listen  [::]:443 ssl;
+        server_name  nginx-lb;
+
+        ssl_certificate     /var/run/secrets/tls/tls.crt;
+        ssl_certificate_key /var/run/secrets/tls/tls.key;
+
+        location / {
+            root   /usr/share/nginx/html;
+            index  index_secure.html;
+        }
+    }
