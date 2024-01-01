@@ -12,3 +12,4 @@ resources:
 - ingress.yaml
 - config.yaml
 - data.yaml
+- cert.yaml

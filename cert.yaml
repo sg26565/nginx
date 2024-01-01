@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+
+metadata:
+  name: nginx-tls-cert
+
+spec:
+  secretName: nginx-tls-cert
+
+  commonName: nginx
+  
+  dnsNames:
+    - nginx.default.svc.cluster.local
+    - nginx-lb.lan
+    - nginx
+
+  issuerRef:
+    name: my-ca
+    kind: ClusterIssuer
+    group: cert-manager.io

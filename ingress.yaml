@@ -33,12 +33,12 @@ metadata:
 
   annotations:
     cert-manager.io/cluster-issuer: my-ca
+    cert-manager.io/common-name: nginx
 
 spec:
   tls:
     - hosts:
         - nginx.lan
-        - nginx-lb.lan
       secretName: nginx-int-cert
 
   rules:
