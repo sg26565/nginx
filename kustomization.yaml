@@ -3,13 +3,15 @@ kind: Kustomization
 
 namespace: default
 
-commonLabels:
-  app.kubernetes.io/name: nginx
+labels:
+  - pairs:
+      app.kubernetes.io/name: nginx
 
 resources:
-- deployment.yaml
-- service.yaml
-- ingress.yaml
+#- deployment.yaml
+#- service.yaml
+#- ingress.yaml
 - config.yaml
 - data.yaml
 - cert.yaml
+- kservice.yaml

@@ -11,6 +11,7 @@ spec:
   
   dnsNames:
     - nginx.default.svc.cluster.local
+    - nginx-knative.default.svc.cluster.local
     - nginx-lb.lan
     - nginx
 

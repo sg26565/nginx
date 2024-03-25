@@ -1,0 +1,43 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: nginx-knative
+  namespace: default
+spec:
+  template:
+    spec:
+      volumes:
+        - name: tls-cert
+          secret:
+            secretName: nginx-tls-cert
+        - name: config
+          configMap:
+            name: nginx-config
+        - name: data
+          configMap:
+            name: nginx-data
+
+      containers:
+        - image: nginx
+          ports:
+            - containerPort: 80
+              protocol: TCP
+
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 1000m
+              memory: 128Mi
+
+          volumeMounts:
+            - name: tls-cert
+              readOnly: true
+              mountPath: /var/run/secrets/tls
+            - name: config
+              readOnly: true
+              mountPath: /etc/nginx/conf.d
+            - name: data
+              readOnly: true
+              mountPath: /usr/share/nginx/html
