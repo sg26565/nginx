@@ -18,7 +18,8 @@ spec:
             name: nginx-data
 
       containers:
-        - image: nginx
+        - name: nginx
+          image: nginx
           ports:
             - containerPort: 80
               protocol: TCP
@@ -28,9 +29,14 @@ spec:
               cpu: 100m
               memory: 64Mi
             limits:
-              cpu: 1000m
+              cpu: "1"
               memory: 128Mi
 
+          readinessProbe:
+            successThreshold: 1
+            tcpSocket:
+              port: 0
+    
           volumeMounts:
             - name: tls-cert
               readOnly: true
