@@ -1,0 +1,31 @@
+apiVersion: networking.internal.knative.dev/v1alpha1
+kind: ClusterDomainClaim
+metadata:
+  name: nginx.treichels.net
+spec:
+  namespace: default
+---
+apiVersion: serving.knative.dev/v1beta1
+kind: DomainMapping
+metadata:
+  name: nginx.treichels.net
+spec:
+  ref:
+    name: nginx
+    kind: Service
+    apiVersion: serving.knative.dev/v1
+  tls:
+    secretName: nginx-tls-cert
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: nginx-custom
+
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: nginx.treichels.net
+    
+spec:
+  type: ExternalName
+  externalName: nginx.default.knative.treichels.net

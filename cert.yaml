@@ -7,15 +7,12 @@ metadata:
 spec:
   secretName: nginx-tls-cert
 
-  commonName: nginx
-  
+  commonName: nginx.treichels.net
+
   dnsNames:
-    - nginx.default.svc.cluster.local
-    - nginx-knative.default.svc.cluster.local
-    - nginx-lb.lan
-    - nginx
+    - nginx.treichels.net
 
   issuerRef:
-    name: my-ca
+    name: letsencrypt
     kind: ClusterIssuer
     group: cert-manager.io

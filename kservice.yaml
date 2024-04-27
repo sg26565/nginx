@@ -1,15 +1,12 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: nginx-knative
+  name: nginx
   namespace: default
 spec:
   template:
     spec:
       volumes:
-        - name: tls-cert
-          secret:
-            secretName: nginx-tls-cert
         - name: config
           configMap:
             name: nginx-config
@@ -38,9 +35,6 @@ spec:
               port: 0
     
           volumeMounts:
-            - name: tls-cert
-              readOnly: true
-              mountPath: /var/run/secrets/tls
             - name: config
               readOnly: true
               mountPath: /etc/nginx/conf.d
